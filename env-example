@@ -11,14 +11,13 @@ CLIENT_DEV=http://localhost:4200
 CLIENT_PROD=http://localhost:4200
 
 # PostgreSQL
-POSTGRES_HOST=localhost
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=agribusiness
 POSTGRES_PORT=5432:5432
 
 # Prisma
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/agribusiness
+DATABASE_URL=postgresql://postgres:postgres@host.docker.internal/agribusiness?schema=public
 
 # Swagger
 SWAGGER_PREFIX=swagger
