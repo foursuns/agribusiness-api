@@ -39,6 +39,16 @@ npm run seed
 npx prisma studio
 ```
 
+## Tests
+
+```bash
+npm run test
+```
+
+```bash
+npm run test:cov
+```
+
 ## Running the app
 
 ```bash
