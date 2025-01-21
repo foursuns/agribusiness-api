@@ -16,7 +16,7 @@ ren env-example .env
 ## Docker
 
 ```bash
-docker compose -f "docker-composer.yml" up -d --build
+docker-compose -f "docker-composer.yml" up -d --build
 ```
 
 ## Prisma
