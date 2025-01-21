@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CultureType {
+  Agrícola 
+  Pastagem 
+  Silvicultura
+}
+
+enum ProducerType {
+  PF
+  PJ
+}
+                                                                                                          
+model Producer {
+  id              Int           @id(map: "pk_producer") @default(autoincrement())
+  name            String        @db.VarChar(50)
+  type            ProducerType  @default(PF)
+  document        String        @db.VarChar(14) @unique
+  status          Boolean       @default(true)
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  farms           Farm[]
+  @@map("producers")
+}
+                                                                                                          
+model Farm {
+  id              Int           @id(map: "pk_farm") @default(autoincrement())
+  name            String        @db.VarChar(50)
+  city            String        @db.VarChar(50)
+  state           String        @db.Char(2)
+  country         String        @db.VarChar(50)
+  producer_id     Int
+  total_area      Decimal       @db.Decimal(12,2) @default(0)
+  planting_area   Decimal       @db.Decimal(12,2) @default(0)
+  vegetation_area Decimal       @db.Decimal(12,2) @default(0)
+  status          Boolean       @default(true)
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  producer        Producer      @relation(fields: [producer_id], references: [id])
+  harvest         Harvest[]
+  @@map("farms")
+}
+
+model Harvest {
+  id              Int           @id(map: "pk_harvest") @default(autoincrement())
+  farm_id         Int
+  culture_id      Int
+  year            Int           @db.SmallInt
+  status          Boolean       @default(true)
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  farm            Farm          @relation(fields: [farm_id], references: [id])
+  culture         Culture       @relation(fields: [culture_id], references: [id])
+  @@map("harvests")
+}
+
+model Specie {
+  id              Int           @id(map: "pk_specie") @default(autoincrement())
+  name            String        @db.VarChar(50)
+  status          Boolean       @default(true)
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  cultures        Culture[]
+  @@map("species")
+}
+
+model Culture {
+  id              Int          @id(map: "pk_culture") @default(autoincrement())
+  type            CultureType  @default(Agrícola)
+  specie_id       Int
+  status          Boolean      @default(true)
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
+  specie          Specie       @relation(fields: [specie_id], references: [id])
+  harvest         Harvest[]
+  @@map("cultures")
+}
